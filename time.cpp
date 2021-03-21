@@ -36,8 +36,8 @@ inline static std::optional<uint32_t> precision_range(precision_t upper,
   return diff;
 }
 
-std::optional<std::string> format_time(uint32_t sec, precision_t upper,
-                                       precision_t lower) {
+std::optional<std::string> mk_timestr(uint32_t sec, precision_t upper,
+                                      precision_t lower) {
   auto precision_opt = precision_range(upper, lower);
   if (!precision_opt.has_value()) {
     fprintf(stderr, "unsupported date format %s, %s", show(upper), show(lower));
@@ -64,7 +64,7 @@ std::optional<std::string> format_time(uint32_t sec, precision_t upper,
 
 #define BUFSZ 3
 
-std::optional<std::tuple<uint32_t, precision_t, precision_t>>
+std::optional<std::tuple<uint32_t, timefmt_t>>
 parse_time_str(std::string_view time_str) {
   char buffer[3];
   char *sp = buffer;
@@ -120,8 +120,12 @@ parse_time_str(std::string_view time_str) {
       lower = pint;
     }
   }
-  return std::make_tuple(sec, static_cast<precision_t>(upper),
-                         static_cast<precision_t>(lower));
+  return std::make_tuple(
+
+      sec,
+
+      timefmt_t{.upper = static_cast<precision_t>(upper),
+                .lower = static_cast<precision_t>(lower)});
 }
 #undef BUFSZ
 

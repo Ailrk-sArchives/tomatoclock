@@ -5,6 +5,11 @@
 
 namespace tomatoclock {
 
+struct timefmt_t {
+  precision_t upper;
+  precision_t lower;
+};
+
 struct config_t {
   // contorl display
   bool use_history;
@@ -16,8 +21,9 @@ struct config_t {
   bool show_help;
 
   // style setting
-  std::string format_str;
-  rune_table &rune_style;
+  timefmt_t timefmt;
+  std::string fmt_str;
+  rune_table &style;
 };
 
 } // namespace tomatoclock

@@ -11,7 +11,7 @@ void error();
 
 // simple wrapper, only intended to manage the lifetime of tb_cel
 struct back_buffer {
-  struct tb_cell *buffer;
+  struct tb_cell *bbuffer;
   uint32_t bbh = 0;
   uint32_t bbw = 0;
 
@@ -19,10 +19,10 @@ struct back_buffer {
   back_buffer();
   ~back_buffer();
   void realloc(uint32_t w, uint32_t h);
-  void update(uint32_t x, uint32_t y, void (*)(back_buffer &));
-  void update(void (*)(back_buffer &));
+  void update(uint32_t x, uint32_t y, void (*)());
+  void update(void (*)());
 };
 
-void print_rune(back_buffer &buf, rune_t rune, uint32_t x, uint32_t y);
-void print_clock(back_buffer &buf, uint32_t sec);
+void print_rune(rune_t rune, uint32_t x, uint32_t y);
+void print_clock(rune_table table, const timefmt_t &fmt, uint32_t sec);
 } // namespace tomatoclock

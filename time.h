@@ -1,5 +1,6 @@
 #pragma once
 
+#include "def.h"
 #include <iostream>
 #include <optional>
 #include <sstream>
@@ -19,10 +20,10 @@ inline bool operator<(precision_t x, precision_t y) {
 
 const char *show(precision_t);
 uint32_t to_s(precision_t);
-std::optional<std::string> format_time(uint32_t sec, precision_t upper,
-                                       precision_t lower);
+std::optional<std::string> mk_timestr(uint32_t sec, precision_t upper,
+                                      precision_t lower);
 
-std::optional<std::tuple<uint32_t, precision_t, precision_t>>
+std::optional<std::tuple<uint32_t, timefmt_t>>
 parse_time_str(std::string_view time_str);
 
 } // namespace tomatoclock
