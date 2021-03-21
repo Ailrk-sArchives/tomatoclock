@@ -31,9 +31,12 @@ set_property(TARGET tomatoclock PROPERTY CXX_STANDARD 17)
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
   set(DEBUG_COMPILATION_FLAG "")
   set(DEBUG_COMPILATION_FLAG "${DEBUG_COMPILATION_FLAG} -g")
+  set(DEBUG_COMPILATION_FLAG "${DEBUG_COMPILATION_FLAG} -fsanitize=address")
+
   set_target_properties(tomatoclock
     PROPERTIES
-    COMPILE_FLAGS "${DEBUG_COMPILATION_FLAG}")
+    COMPILE_FLAGS "${DEBUG_COMPILATION_FLAG}"
+    LINK_FLAGS "-fsanitize=address")
 endif()
 
 target_link_libraries(tomatoclock termbox)

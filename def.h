@@ -17,7 +17,7 @@ struct config_t {
 
   // style setting
   std::string format_str;
-  font_table &font_style;
+  rune_table &rune_style;
 };
 
 } // namespace tomatoclock
