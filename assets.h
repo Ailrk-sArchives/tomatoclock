@@ -7,7 +7,10 @@ constexpr std::string_view title = "ｔｏｍａｔｏｃｌｏｃｋ";
 
 enum class FONT { F0 = 0, F1, F2, F3, F4, F5, F6, F7, F8, F9, COLOMN };
 
-using font_table = std::array<std::array<const char *, 6>, 11>;
+#define FONT_HEIGTH 6
+#define FONT_KIND 11
+using font_t = std::array<const char *, FONT_HEIGTH>;
+using font_table = std::array<font_t, FONT_KIND>;
 
 constexpr font_table fonts_style1{{
     {

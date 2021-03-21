@@ -75,18 +75,22 @@ parse_time_str(std::string_view time_str) {
 
   for (auto c : time_str) {
     if (std::isdigit(c)) {
-      if (sp - buffer > BUFSZ - 1) {
+
+      bool cond = sp - buffer > BUFSZ - 1;
+      cond = cond || sp == buffer && c > '5';
+      if (cond) {
         return std::nullopt;
       }
+
       *sp++ = c;
       continue;
     }
 
-    if (sp != buffer + BUFSZ - 1) {
+    if (sp > buffer + BUFSZ - 1) {
       return std::nullopt;
     }
 
-    if (c != 's' || c != 'm' || c != 'h') {
+    if (c != 's' && c != 'm' && c != 'h') {
       return std::nullopt;
     }
 
@@ -141,6 +145,17 @@ int main() {
     l1 = precision_t::SEC;
     auto v = tomatoclock::format_time(8000, u1, l1);
     assert(v == "2:13:20");
+  }
+
+  {
+    auto [sec0, u0, l0] = tomatoclock::parse_time_str("20m10s").value();
+    auto [sec1, u1, l1] = tomatoclock::parse_time_str("1h30m20s").value();
+    assert(sec0 == 1210);
+    assert(sec1 == 5420);
+    assert(u0 == precision_t::MIN);
+    assert(l0 == precision_t::SEC);
+    assert(u1 == precision_t::HOUR);
+    assert(l1 == precision_t::SEC);
   }
 
   return 0;

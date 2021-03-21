@@ -14,7 +14,7 @@ endif()
 # use force to enforce the change
 set(MY_CACHE_VAR "VALUE" CACHE STRING "XXV" FORCE)
 
-add_compile_definitions(TEST_TIME)
+add_compile_definitions(TEST_DRAW)
 
 add_executable(tomatoclock
   main.cpp
