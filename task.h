@@ -5,6 +5,8 @@
 #include <queue>
 #include <thread>
 
+// it's essentially an event loop with only timout event.
+
 namespace tomatoclock {
 
 struct tomato_task {

@@ -8,8 +8,6 @@
 
 namespace tomatoclock {
 
-enum class precision_t { SEC = 0, MIN, HOUR };
-
 inline bool operator>(precision_t x, precision_t y) {
   return static_cast<uint32_t>(x) > static_cast<uint32_t>(y);
 }

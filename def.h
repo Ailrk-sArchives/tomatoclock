@@ -5,6 +5,8 @@
 
 namespace tomatoclock {
 
+enum class precision_t { SEC = 0, MIN, HOUR };
+
 struct timefmt_t {
   precision_t upper;
   precision_t lower;
