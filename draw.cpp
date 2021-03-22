@@ -158,14 +158,13 @@ int main() {
   auto draw = []() {
     print_rune(runes_style1[ix('8')], 40, 0, TB_RED, TB_DEFAULT);
     print_rune(runes_style1[ix('3')], 20, 20);
-    print_rune(runes_style1[ix('9')], 0, 0, TB_BLUE, TB_DEFAULT);
     print_rune(runes_style1[ix(':')], 100, 25, TB_BLUE, TB_DEFAULT);
   };
 #endif
 
 #ifdef TEST_FORMATED_TIME
   auto draw = []() {
-    print_clock(runes_style1, timefmt_t{precision_t::MIN, precision_t::SEC},
+    print_clock(runes_style2, timefmt_t{precision_t::MIN, precision_t::SEC},
                 1400);
   };
 #endif

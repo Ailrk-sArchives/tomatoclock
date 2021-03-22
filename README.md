@@ -1,6 +1,8 @@
 ## tomatoclock
 A linux command line count down tomatoclock and script runner.
 
+![logo](./tomatoclock.png)
+
 #### Dependencies
 [termbox](https://github.com/nsf/termbox/tree/master/src)
 
