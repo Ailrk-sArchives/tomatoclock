@@ -16,6 +16,9 @@ inline int ix(char n) {
   if (std::isdigit(n)) {
     return n - '0';
   }
+  if (n == ':') {
+    return RUNE_KIND - 1;
+  }
   return n;
 }
 

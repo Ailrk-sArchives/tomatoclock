@@ -45,9 +45,9 @@ void back_buffer::update(uint32_t x, uint32_t y, void (*draw)()) {
   memcpy(tb_cell_buffer(), bbuffer, TBCELL_SZ * bbh * bbw);
   tb_present();
 }
+
 void back_buffer::update(void (*draw)()) {
   tb_clear();
-  std::cout << "out" << std::endl;
   memcpy(tb_cell_buffer(), bbuffer, TBCELL_SZ * bbh * bbw);
   draw();
   tb_present();
@@ -68,7 +68,8 @@ std::pair<uint32_t, uint32_t> rune_geometry(const rune_t &rune) {
 // chop character array into utf8 runes.
 static std::vector<uint32_t> to_utf8(const char *line) {
   std::string_view view{line};
-  std::vector<uint32_t> vec(64, 0);
+  std::vector<uint32_t> vec{};
+  vec.reserve(64);
   uint32_t result;
   while (view.size() > 0) {
     uint32_t sz = tb_utf8_char_to_unicode(&result, view.data());
@@ -101,31 +102,37 @@ void print_clock(rune_table table,     /* fontfontfont style */
 ) {
   uint32_t bw = tb_width();
   uint32_t bh = tb_height();
+
   auto timestr_opt = mk_timestr(sec, fmt.upper, fmt.lower);
   if (!timestr_opt.has_value()) {
     fprintf(stderr, "error when formatting the time\n");
     abort();
   }
 
-  std::vector<rune_t> runes;
+  auto delta = [](uint32_t base, uint32_t w) -> uint32_t {
+    return (base - w) / 8;
+  };
+
+  std::vector<std::tuple<rune_t, int32_t, int32_t>> runes;
+  uint32_t rune_max_width = 0;
+  uint32_t total_width = 0;
   for (char c : timestr_opt.value()) {
-    if (c == ':') {
-      runes.push_back(table[RUNE_KIND - 1]);
-    } else {
-      runes.push_back(table[c - '0']);
-    }
+    rune_t rune = table[ix(c)];
+    auto [rw, rh] = rune_geometry(rune);
+    runes.push_back({rune, rw, rh});
+
+    rune_max_width = rw > rune_max_width ? rw : rune_max_width;
+    total_width += rw;
   }
 
-  for (int i = 0; i < 2; i++) {
-    auto rune = runes[i];
-    auto [rw, rh] = rune_geometry(rune);
-    std::cout << "time" << timestr_opt.value() << std::endl;
-    std::cout << "rwrh " << rw << ", " << rh << std::endl;
-    print_rune(rune, bw / 8 + rw * i, bh / 2);
-    std::cout << "i" << i << std::endl;
-    std::cout << "bwbh " << bw << ", " << bh << std::endl;
-    std::cout << "bwbh calculated: " << bw / 8 + rw * i << ", " << bh / 2
-              << std::endl;
+  // TODO not centered when resize panel
+  for (int i = 0; i < runes.size(); i++) {
+    auto [rune, rw, rh] = runes[i];
+    uint32_t d = delta(rune_max_width, rw);
+    uint32_t w_left_margin = 1.1 * total_width;
+    uint32_t w = bw - w_left_margin + (d + rune_max_width / 2) * i;
+    uint32_t h = bh / 2;
+    print_rune(rune, w, h, TB_DEFAULT, TB_DEFAULT);
   }
 }
 
@@ -145,18 +152,14 @@ int main() {
   std::ofstream out("debug.log");
   auto *coutbuf = std::cout.rdbuf();
   std::cout.rdbuf(out.rdbuf());
-#define TEST_SINGLE_RUNE
+#define TEST_FORMATED_TIME
 
 #ifdef TEST_SINGLE_RUNE
   auto draw = []() {
-    uint32_t w = tb_width();
-    uint32_t h = tb_height();
-    print_rune(runes_style1[ix('3')], -20, 40);
-    print_rune(runes_style1[ix('3')], -20, 30);
-    print_rune(runes_style1[ix('3')], -20, 20);
-    print_rune(runes_style1[ix('4')], 40, 0, TB_RED, TB_DEFAULT);
-    print_rune(runes_style1[ix('4')], 30, 0);
-    print_rune(runes_style1[ix('4')], 20, 0);
+    print_rune(runes_style1[ix('8')], 40, 0, TB_RED, TB_DEFAULT);
+    print_rune(runes_style1[ix('3')], 20, 20);
+    print_rune(runes_style1[ix('9')], 0, 0, TB_BLUE, TB_DEFAULT);
+    print_rune(runes_style1[ix(':')], 100, 25, TB_BLUE, TB_DEFAULT);
   };
 #endif
 
@@ -179,8 +182,14 @@ int main() {
           return 0;
         }
         break;
+
+      // TODO doesn't response to resize
+      case TB_EVENT_RESIZE:
+        buff.realloc(ev.w, ev.h);
+        std::cout << "good" << std::endl;
+        std::cout << tb_width() << std::endl;
+        std::cout << tb_height() << std::endl;
       }
-      std::cout << "here" << std::endl;
       buff.update(draw);
     }
   }
