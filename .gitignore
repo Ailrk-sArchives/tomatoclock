@@ -65,6 +65,7 @@ _deps
 test/external/*
 external/*
 
+*.log
 .ccls-cache/
 build/
 # End of https://www.toptal.com/developers/gitignore/api/cmake

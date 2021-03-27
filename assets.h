@@ -12,17 +12,18 @@ enum class RUNE { F0 = 0, F1, F2, F3, F4, F5, F6, F7, F8, F9, COLOMN };
 using rune_t = std::array<const char *, RUNE_HEIGTH>;
 using rune_table = std::array<rune_t, RUNE_KIND>;
 
-inline int ix(char n) {
-  if (std::isdigit(n)) {
-    return n - '0';
-  }
-  if (n == ':') {
-    return RUNE_KIND - 1;
-  }
-  return n;
+inline int
+ix(char n) {
+    if (std::isdigit(n)) {
+        return n - '0';
+    }
+    if (n == ':') {
+        return RUNE_KIND - 1;
+    }
+    return n;
 }
 
-constexpr rune_table runes_style1{{
+constexpr rune_table runes_style1{ {
     {
         "███████",
         "██   ██",
@@ -124,9 +125,9 @@ constexpr rune_table runes_style1{{
         "  ",
         "  ",
     },
-}};
+} };
 
-constexpr rune_table runes_style2{{
+constexpr rune_table runes_style2{ {
     {
         " ██████╗ ",
         "██╔═████╗",
@@ -225,7 +226,7 @@ constexpr rune_table runes_style2{{
         "╚═╝",
         "   ",
     },
-}};
+} };
 
 constexpr const char *help_info = R"(
   usage: coutdown [OPTIONS]
