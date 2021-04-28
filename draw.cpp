@@ -96,6 +96,7 @@ to_utf8(const char *line) {
     std::string_view view{ line };
     std::vector<uint32_t> vec{};
     vec.reserve(64);
+
     uint32_t result;
     while (view.size() > 0) {
         uint32_t sz = tb_utf8_char_to_unicode(&result, view.data());

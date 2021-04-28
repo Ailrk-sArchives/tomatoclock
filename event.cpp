@@ -19,39 +19,11 @@
 // TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#pragma once
-#include <iostream>
-#include <memory>
-#include <mutex>
-#include <queue>
-#include <thread>
+#include "event.h"
 
-// it's essentially an event loop with only timout event.
-
-namespace tomatoclock {
-
-struct tomato_task {
-    std::string_view sh_script;
-    size_t duration_in_ms;
-};
-
-// run a task
-void
-run_task(tomato_task task);
-
-// task queue holds the list of tasks and there complition time.
-template <typename T>
-class tomato_queue {
-    std::unique_ptr<std::queue<T>> queue_;
-
-  public:
-    tomato_queue()
-        : queue_(std::make_unique<std::queue<T>>()) {}
-
-    void add(T value) {}
-    T get() {}
-};
-
-std::thread
-countdown(int sec);
-} // namespace tomatoclock
+#ifdef TEST_TIMER
+int
+main(void) {
+    return 0;
+}
+#endif

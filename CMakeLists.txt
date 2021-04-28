@@ -21,11 +21,12 @@ add_executable(tomatoclock
   draw.h
   draw.cpp
   assets.h
-  task.cpp
-  task.h)
+  event.cpp
+  event.h
+  threadpool.h
+  threadpool.cpp)
 
 set_property(TARGET tomatoclock PROPERTY CXX_STANDARD 17)
-
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_compile_definitions(TEST_DRAW)
   set(DEBUG_COMPILATION_FLAG "")
