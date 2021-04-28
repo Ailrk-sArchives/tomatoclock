@@ -1,6 +1,5 @@
 #include <condition_variable>
 #include <future>
-#include <iostream>
 #include <memory>
 #include <mutex>
 #include <thread>
